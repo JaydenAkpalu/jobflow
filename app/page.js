@@ -1,65 +1,55 @@
-import Image from "next/image";
+import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', color: '#0f172a' }}>
+
+      {/* Navbar */}
+      <nav style={{ borderBottom: '1px solid #e2e8f0', padding: '16px 24px' }}>
+        <div style={{ maxWidth: '1152px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '20px', fontWeight: '700', color: '#0f172a' }}>JobFlow</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Link href="/login" style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none' }}>
+              Login
+            </Link>
+            <Link href="/signup" style={{ fontSize: '14px', fontWeight: '500', backgroundColor: '#2563eb', color: '#ffffff', padding: '8px 16px', borderRadius: '8px', textDecoration: 'none' }}>
+              Sign Up
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </nav>
+
+      {/* Hero */}
+      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '96px 24px' }}>
+        <div style={{ maxWidth: '768px', margin: '0 auto', textAlign: 'center' }}>
+          <span style={{ display: 'inline-block', fontSize: '14px', fontWeight: '500', color: '#2563eb', backgroundColor: '#eff6ff', padding: '4px 12px', borderRadius: '999px', marginBottom: '24px' }}>
+            Built for job seekers
+          </span>
+          <h1 style={{ fontSize: '48px', fontWeight: '700', color: '#0f172a', lineHeight: '1.2', marginBottom: '24px' }}>
+            All your job applications.<br />
+            One place.
+          </h1>
+          <p style={{ fontSize: '20px', color: '#64748b', marginBottom: '40px', maxWidth: '560px', margin: '0 auto 40px' }}>
+            JobFlow brings all your job applications from LinkedIn, Handshake, Indeed, company websites, and anywhere else you apply — into one central dashboard.
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+            <Link href="/signup" style={{ backgroundColor: '#2563eb', color: '#ffffff', padding: '12px 32px', borderRadius: '8px', fontWeight: '500', textDecoration: 'none', fontSize: '18px' }}>
+              Get Started Free
+            </Link>
+            <Link href="/login" style={{ color: '#64748b', padding: '12px 32px', borderRadius: '8px', fontWeight: '500', textDecoration: 'none', fontSize: '18px', border: '1px solid #e2e8f0' }}>
+              Log In
+            </Link>
+          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer style={{ borderTop: '1px solid #e2e8f0', padding: '24px' }}>
+        <div style={{ maxWidth: '1152px', margin: '0 auto', textAlign: 'center', fontSize: '14px', color: '#94a3b8' }}>
+          © 2026 JobFlow. Built for job seekers.
+        </div>
+      </footer>
+
     </div>
-  );
+  )
 }
