@@ -2,17 +2,23 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', color: '#0f172a' }}>
+    <div className="min-h-screen flex flex-col bg-white text-slate-900">
 
       {/* Navbar */}
-      <nav style={{ borderBottom: '1px solid #e2e8f0', padding: '16px 24px' }}>
-        <div style={{ maxWidth: '1152px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '20px', fontWeight: '700', color: '#0f172a' }}>JobFlow</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Link href="/login" style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none' }}>
+      <nav className="border-b border-slate-200 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <span className="text-xl font-bold text-slate-900">JobFlow</span>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+            >
               Login
             </Link>
-            <Link href="/signup" style={{ fontSize: '14px', fontWeight: '500', backgroundColor: '#2563eb', color: '#ffffff', padding: '8px 16px', borderRadius: '8px', textDecoration: 'none' }}>
+            <Link
+              href="/signup"
+              className="text-sm font-medium bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
               Sign Up
             </Link>
           </div>
@@ -20,23 +26,29 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '96px 24px' }}>
-        <div style={{ maxWidth: '768px', margin: '0 auto', textAlign: 'center' }}>
-          <span style={{ display: 'inline-block', fontSize: '14px', fontWeight: '500', color: '#2563eb', backgroundColor: '#eff6ff', padding: '4px 12px', borderRadius: '999px', marginBottom: '24px' }}>
+      <main className="flex-1 flex items-center justify-center px-6 py-24">
+        <div className="max-w-3xl mx-auto text-center">
+          <span className="inline-block text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-6">
             Built for job seekers
           </span>
-          <h1 style={{ fontSize: '48px', fontWeight: '700', color: '#0f172a', lineHeight: '1.2', marginBottom: '24px' }}>
+          <h1 className="text-5xl font-bold text-slate-900 leading-tight mb-6">
             All your job applications.<br />
             One place.
           </h1>
-          <p style={{ fontSize: '20px', color: '#64748b', marginBottom: '40px', maxWidth: '560px', margin: '0 auto 40px' }}>
+          <p className="text-xl text-slate-500 mb-10 max-w-xl mx-auto">
             JobFlow brings all your job applications from LinkedIn, Handshake, Indeed, company websites, and anywhere else you apply — into one central dashboard.
           </p>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-            <Link href="/signup" style={{ backgroundColor: '#2563eb', color: '#ffffff', padding: '12px 32px', borderRadius: '8px', fontWeight: '500', textDecoration: 'none', fontSize: '18px' }}>
+          <div className="flex items-center justify-center gap-4">
+            <Link
+              href="/signup"
+              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg"
+            >
               Get Started Free
             </Link>
-            <Link href="/login" style={{ color: '#64748b', padding: '12px 32px', borderRadius: '8px', fontWeight: '500', textDecoration: 'none', fontSize: '18px', border: '1px solid #e2e8f0' }}>
+            <Link
+              href="/login"
+              className="text-slate-600 px-8 py-3 rounded-lg font-medium hover:text-slate-900 transition-colors text-lg border border-slate-200 hover:border-slate-300"
+            >
               Log In
             </Link>
           </div>
@@ -44,8 +56,8 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer style={{ borderTop: '1px solid #e2e8f0', padding: '24px' }}>
-        <div style={{ maxWidth: '1152px', margin: '0 auto', textAlign: 'center', fontSize: '14px', color: '#94a3b8' }}>
+      <footer className="border-t border-slate-200 px-6 py-6">
+        <div className="max-w-6xl mx-auto text-center text-sm text-slate-400">
           © 2026 JobFlow. Built for job seekers.
         </div>
       </footer>
