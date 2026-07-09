@@ -17,7 +17,7 @@ export default function Navbar({ pageTitle }) {
       <h1 className="text-lg font-semibold text-slate-900">{pageTitle}</h1>
       <button
         onClick={handleLogout}
-        className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+        className="text-sm font-medium text-slate-600 hover:text-slate-900 cursor-pointer transition-colors"
       >
         Logout
       </button>
