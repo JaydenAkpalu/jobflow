@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+//-- GET single application --
+
 export async function GET(request, { params }) {
   // extract the application id from the URL params
   // e.g. /api/applications/abc-123 → id = 'abc-123'
@@ -34,4 +36,139 @@ export async function GET(request, { params }) {
 
   // return the application as JSON with default 200 status
   return NextResponse.json({ application })
+}
+
+//-- PATCH — update an existing application and optionally replace files --
+
+export async function PATCH(request, { params }) {
+  // extract the application id from the URL params
+  const { id } = await params
+
+  // create supabase server client to talk to the database
+  const supabase = await createClient()
+
+  // get the currently logged in user from the session cookie
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // if no user is logged in, return 401 unauthorized
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
+  }
+
+  // read the request body as multipart/form-data
+  // we use formData because the request may contain files
+  const formData = await request.formData()
+
+  // extract text fields — only fields that were sent will be non-null
+  const companyName = formData.get('company_name')
+  const jobTitle = formData.get('job_title')
+  const jobUrl = formData.get('job_url')
+  const location = formData.get('location')
+  const status = formData.get('status')
+  const appliedDate = formData.get('applied_date')
+  const notes = formData.get('notes')
+
+  // extract file fields — will be null if not included in the request
+  const resumeFile = formData.get('resume')
+  const coverLetterFile = formData.get('cover_letter')
+
+  // build update object with only the fields that were actually sent
+  // this ensures we only update what changed, not overwrite everything
+  const updates = {}
+
+  if (companyName) updates.company_name = companyName
+  if (jobTitle) updates.job_title = jobTitle
+  if (jobUrl !== null) updates.job_url = jobUrl
+  if (location !== null) updates.location = location
+  if (status) updates.status = status
+  if (appliedDate) updates.applied_date = appliedDate
+  if (notes !== null) updates.notes = notes
+
+  // fetch the current application to get existing file paths
+  // we need these to delete old files before uploading new ones
+  const { data: existing, error: fetchError } = await supabase
+    .from('applications')
+    .select('resume_path, cover_letter_path')
+    .eq('id', id)
+    .eq('user_id', user.id)
+    .single()
+
+  if (fetchError) {
+    return NextResponse.json({ error: 'Application not found' }, { status: 404 })
+  }
+
+  // if a new resume was uploaded, replace the existing one
+  if (resumeFile && resumeFile.size > 0) {
+    // delete the old resume from storage if one exists
+    if (existing.resume_path) {
+      const { error: deleteError } = await supabase.storage
+        .from('application-files')
+        .remove([existing.resume_path])
+
+      if (deleteError) {
+        return NextResponse.json({ error: 'Failed to delete old resume' }, { status: 500 })
+      }
+    }
+
+    // upload the new resume to the same path pattern
+    const resumePath = `${user.id}/${id}/resume.pdf`
+
+    const { error: resumeError } = await supabase.storage
+      .from('application-files')
+      .upload(resumePath, resumeFile, { contentType: 'application/pdf' })
+
+    if (resumeError) {
+      return NextResponse.json({ error: 'Failed to upload resume' }, { status: 500 })
+    }
+
+    // add the new file path and filename to updates
+    updates.resume_path = resumePath
+    updates.resume_filename = resumeFile.name
+  }
+
+  // if a new cover letter was uploaded, replace the existing one
+  if (coverLetterFile && coverLetterFile.size > 0) {
+    // delete the old cover letter from storage if one exists
+    if (existing.cover_letter_path) {
+      const { error: deleteError } = await supabase.storage
+        .from('application-files')
+        .remove([existing.cover_letter_path])
+
+      if (deleteError) {
+        return NextResponse.json({ error: 'Failed to delete old cover letter' }, { status: 500 })
+      }
+    }
+
+    // upload the new cover letter
+    const coverLetterPath = `${user.id}/${id}/cover-letter.pdf`
+
+    const { error: coverLetterError } = await supabase.storage
+      .from('application-files')
+      .upload(coverLetterPath, coverLetterFile, { contentType: 'application/pdf' })
+
+    if (coverLetterError) {
+      return NextResponse.json({ error: 'Failed to upload cover letter' }, { status: 500 })
+    }
+
+    // add the new file path and filename to updates
+    updates.cover_letter_path = coverLetterPath
+    updates.cover_letter_filename = coverLetterFile.name
+  }
+
+  // update the application row with all collected changes
+  const { data: updated, error: updateError } = await supabase
+    .from('applications')
+    .update(updates)
+    .eq('id', id)
+    .eq('user_id', user.id)
+    .select()
+    .single()
+
+  // if the update failed, return 500
+  if (updateError) {
+    return NextResponse.json({ error: 'Failed to update application' }, { status: 500 })
+  }
+
+  // return the updated application with 200 success
+  return NextResponse.json({ application: updated }, { status: 200 })
 }
