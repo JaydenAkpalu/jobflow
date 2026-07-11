@@ -172,3 +172,72 @@ export async function PATCH(request, { params }) {
   // return the updated application with 200 success
   return NextResponse.json({ application: updated }, { status: 200 })
 }
+
+
+
+//-- DELETE — remove an application and all associated files --
+
+export async function DELETE(request, { params }) {
+  // extract the application id from the URL params
+  const { id } = await params
+
+  // create supabase server client to talk to the database
+  const supabase = await createClient()
+
+  // get the currently logged in user from the session cookie
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // if no user is logged in, return 401 unauthorized
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
+  }
+
+  // fetch existing file paths before deleting anything
+  // we need these to delete files from storage after the row is gone
+  const { data: existing, error: fetchError } = await supabase
+    .from('applications')
+    .select('resume_path, cover_letter_path')
+    .eq('id', id)
+    .eq('user_id', user.id)
+    .single()
+
+  if (fetchError) {
+    return NextResponse.json({ error: 'Application not found' }, { status: 404 })
+  }
+
+  // delete resume from storage if one exists
+  if (existing.resume_path) {
+    const { error: deleteResumeError } = await supabase.storage
+      .from('application-files')
+      .remove([existing.resume_path])
+
+    if (deleteResumeError) {
+      return NextResponse.json({ error: 'Failed to delete resume' }, { status: 500 })
+    }
+  }
+
+  // delete cover letter from storage if one exists
+  if (existing.cover_letter_path) {
+    const { error: deleteCoverError } = await supabase.storage
+      .from('application-files')
+      .remove([existing.cover_letter_path])
+
+    if (deleteCoverError) {
+      return NextResponse.json({ error: 'Failed to delete cover letter' }, { status: 500 })
+    }
+  }
+
+  // delete the application row from the database
+  const { error } = await supabase
+    .from('applications')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', user.id)
+
+  if (error) {
+    return NextResponse.json({ error: 'Failed to delete application' }, { status: 500 })
+  }
+
+  // return success confirmation
+  return NextResponse.json({ success: true }, { status: 200 })
+}
