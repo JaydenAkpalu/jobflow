@@ -1,69 +1,62 @@
 'use client'
 
 // imports
-import { useState } from 'react'
-import { useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-
 
 export default function ApplicationsPage() {
-    // states - applications list, loading, error, search query, status filter
-    const [ applications, setApplications ] = useState([])
-    const [ loading, setLoading ] = useState(true)
-    const [ error, setError ] = useState(null)
-    const [ searchQuery, setSearchQuery ] = useState('')
-    const [ statusFilter, setStatusFilter ] = useState('')
+  // state — applications list, loading, error, search and filter controls
+  const [applications, setApplications] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
 
-    // useEffect - fetch applications when page loads
-    useEffect(() => {
-        async function fetchApplications(){
-            try{
-                const response = await fetch('/api/applications')
-                const data = await response.json()
-                setApplications(data.applications)
-            }
-            catch(err) {
-                setError('Failed to load applications')
-            }
-            finally {
-                setLoading(false)
-            }
-        }
-            fetchApplications()
-    }, [])
-
-    // filter logic - filter applications based on search and status
-    const filteredApplications = applications.filter((application) => {
-        // check if search query matches company name or job title
-        const matchesSearch = searchQuery === '' || 
-        application.company_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        application.job_title.toLowerCase().includes(searchQuery.toLowerCase())
-
-        // check if status filter matches
-        const matchesStatus = statusFilter === '' || 
-        application.status === statusFilter
-
-        // only include if both conditions pass
-        return matchesSearch && matchesStatus
-
-    })
-
-    // handle delete - delete an application and remove from list
-    async function handleDelete(id) {
-        await fetch(`/api/applications/${id}`, { method: 'DELETE' } )
-        setApplications(applications.filter((app) => app.id !== id))
+  // fetch all applications when the page first loads
+  useEffect(() => {
+    async function fetchApplications() {
+      try {
+        const response = await fetch('/api/applications')
+        const data = await response.json()
+        setApplications(data.applications)
+      } catch (err) {
+        setError('Failed to load applications')
+      } finally {
+        // always set loading to false whether fetch succeeded or failed
+        setLoading(false)
+      }
     }
+    fetchApplications()
+  }, []) // empty array — run once on mount, never again
 
-    // return JSX
-        // header: title + add application button
-        // filters: search input + status dropdown
-        // applications list: map over filtered applications
-        // each item: company, role, status badge, date, action buttons
-    return (
+  // filter applications client-side based on search query and status filter
+  // this runs on every render so the list updates instantly as the user types
+  const filteredApplications = applications.filter((application) => {
+    // match company name or job title — case insensitive
+    const matchesSearch =
+      searchQuery === '' ||
+      application.company_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      application.job_title.toLowerCase().includes(searchQuery.toLowerCase())
+
+    // match status exactly — empty string means no filter applied
+    const matchesStatus =
+      statusFilter === '' || application.status === statusFilter
+
+    // only include application if both conditions pass
+    return matchesSearch && matchesStatus
+  })
+
+  // delete an application and remove it from the list without refetching
+  async function handleDelete(id) {
+    await fetch(`/api/applications/${id}`, { method: 'DELETE' })
+    // filter out the deleted application from state immediately
+    setApplications(applications.filter((app) => app.id !== id))
+  }
+
+  return (
     <div className="p-6">
-      {/* Header */}
+
+      {/* Header — page title and add button */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-slate-900">Applications</h1>
         <Link
@@ -74,19 +67,19 @@ export default function ApplicationsPage() {
         </Link>
       </div>
 
-      {/* Filters */}
+      {/* Filters — search input and status dropdown */}
       <div className="flex gap-3 mb-6">
         <input
           type="text"
           placeholder="Search by company or role..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           <option value="">All Statuses</option>
           <option value="applied">Applied</option>
@@ -97,22 +90,24 @@ export default function ApplicationsPage() {
         </select>
       </div>
 
-      {/* Loading state */}
+      {/* Loading state — shown while fetch is in progress */}
       {loading && (
-        <div className="text-center py-12 text-slate-500">Loading applications...</div>
+        <div className="text-center py-12 text-slate-500">
+          Loading applications...
+        </div>
       )}
 
-      {/* Error state */}
+      {/* Error state — shown if fetch failed */}
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-6">
           {error}
         </div>
       )}
 
-      {/* Empty state */}
-      {!loading && !error && filteredApplications.length === 0 && (
+      {/* No applications at all */}
+      {!loading && !error && applications.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-slate-500 mb-4">No applications found.</p>
+          <p className="text-slate-500 mb-4">No applications yet.</p>
           <Link
             href="/applications/new"
             className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
@@ -122,7 +117,14 @@ export default function ApplicationsPage() {
         </div>
       )}
 
-      {/* Applications list */}
+      {/* Has applications but none match filter */}
+      {!loading && !error && applications.length > 0 && filteredApplications.length === 0 && (
+        <div className="text-center py-12">
+            <p className="text-slate-500">No applications match your search or filter</p>
+        </div>
+      )}
+
+      {/* Applications list — rendered when data is loaded and results exist */}
       {!loading && !error && filteredApplications.length > 0 && (
         <div className="space-y-3">
           {filteredApplications.map((application) => (
@@ -130,10 +132,13 @@ export default function ApplicationsPage() {
               key={application.id}
               className="bg-white border border-slate-200 rounded-lg p-4 flex items-center justify-between hover:border-slate-300 transition-colors"
             >
-              {/* Application info */}
+              {/* Application info — company, status badge, role, date */}
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-1">
-                  <h3 className="font-semibold text-slate-900">{application.company_name}</h3>
+                  <h3 className="font-semibold text-slate-900">
+                    {application.company_name}
+                  </h3>
+                  {/* Status badge — color changes based on status value */}
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                     application.status === 'applied' ? 'bg-blue-50 text-blue-600' :
                     application.status === 'interview' ? 'bg-yellow-50 text-yellow-600' :
@@ -141,6 +146,7 @@ export default function ApplicationsPage() {
                     application.status === 'rejected' ? 'bg-red-50 text-red-600' :
                     'bg-slate-100 text-slate-600'
                   }`}>
+                    {/* Capitalise first letter of status for display */}
                     {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
                   </span>
                 </div>
@@ -148,7 +154,7 @@ export default function ApplicationsPage() {
                 <p className="text-xs text-slate-400 mt-1">{application.applied_date}</p>
               </div>
 
-              {/* Actions */}
+              {/* Action buttons — view, edit, delete */}
               <div className="flex items-center gap-2 ml-4">
                 <Link
                   href={`/applications/${application.id}`}
@@ -173,6 +179,7 @@ export default function ApplicationsPage() {
           ))}
         </div>
       )}
+
     </div>
   )
 }
