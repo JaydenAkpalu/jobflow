@@ -135,7 +135,7 @@ export default function ApplicationsPage() {
               {/* Application info — company, status badge, role, date */}
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-1">
-                  <h3 className="font-semibold text-slate-900">
+                  <h3 className="font-semibold text-slate-900 capitalize">
                     {application.company_name}
                   </h3>
                   {/* Status badge — color changes based on status value */}
@@ -150,7 +150,7 @@ export default function ApplicationsPage() {
                     {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
                   </span>
                 </div>
-                <p className="text-sm text-slate-500">{application.job_title}</p>
+                <p className="text-sm text-slate-500 capitalize">{application.job_title}</p>
                 <p className="text-xs text-slate-400 mt-1">{application.applied_date}</p>
               </div>
 
