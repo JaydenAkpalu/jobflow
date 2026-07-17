@@ -26,6 +26,7 @@ export default function ApplicationForm() {
     if (!companyName || !jobTitle || !appliedDate) {
       setError('Company name, job title, and applied date are required')
       setLoading(false)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
 
@@ -49,6 +50,7 @@ export default function ApplicationForm() {
     if (data.error) {
       setError(data.error)
       setLoading(false)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
 
