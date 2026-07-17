@@ -48,9 +48,9 @@ export default function ApplicationsPage() {
 
   // delete an application and remove it from the list without refetching
   async function handleDelete(id) {
-    await fetch(`/api/applications/${id}`, { method: 'DELETE' })
-    // filter out the deleted application from state immediately
-    setApplications(applications.filter((app) => app.id !== id))
+  if (!window.confirm('Are you sure you want to delete this application?')) return
+  await fetch(`/api/applications/${id}`, { method: 'DELETE' })
+  setApplications(applications.filter((app) => app.id !== id))
   }
 
   return (
