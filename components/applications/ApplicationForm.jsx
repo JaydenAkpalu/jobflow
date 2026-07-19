@@ -3,6 +3,7 @@
 // imports
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 // mode: 'create' or 'edit' — controls whether this form creates or updates an application
 // id: only used when mode is 'edit' — the application being edited
@@ -106,6 +107,13 @@ export default function ApplicationForm({ mode, id }) {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
+      {/* Back link — consistent with detail page, gives user an escape route at the top too */}
+        <Link
+        href="/applications"
+        className="text-sm text-slate-500 hover:text-slate-900 transition-colors mb-6 inline-block"
+        >
+        ← Back to Applications
+        </Link>
 
       {/* Header — title changes based on mode */}
       <div className="mb-6">

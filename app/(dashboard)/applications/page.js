@@ -74,12 +74,12 @@ export default function ApplicationsPage() {
           placeholder="Search by company or role..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="flex-1 px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none"
         />
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none"
         >
           <option value="">All Statuses</option>
           <option value="applied">Applied</option>
