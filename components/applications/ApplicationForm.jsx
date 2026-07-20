@@ -120,7 +120,9 @@ export default function ApplicationForm({ mode, id }) {
         <h1 className="text-2xl font-bold text-slate-900">
           {mode === 'edit' ? 'Edit Application' : 'Add Application'}
         </h1>
-        <p className="text-slate-500 text-sm mt-1">Track a new job application</p>
+        <p className="text-slate-500 text-sm mt-1">
+            {mode === 'edit' ? 'Edit your application' : 'Track a new job application'}
+        </p>
       </div>
 
       {/* Error message — validation or API errors */}
