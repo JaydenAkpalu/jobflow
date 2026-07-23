@@ -22,6 +22,7 @@ export async function GET(request) {
     .select('*')
     .eq('user_id', user.id)
     .order('applied_date', { ascending: false })
+    .order('created_at', { ascending: false })
 
   // if the database query failed, return 500 server error
   if (error) {
