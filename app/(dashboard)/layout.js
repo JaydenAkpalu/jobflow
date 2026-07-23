@@ -6,7 +6,7 @@ export default function DashboardLayout({ children }) {
     <div className="min-h-screen bg-slate-50">
       <Sidebar />
       <div className="ml-64">
-        <Navbar pageTitle="Dashboard" />
+        <Navbar/>
         <main className="pt-16 p-6">
           {children}
         </main>

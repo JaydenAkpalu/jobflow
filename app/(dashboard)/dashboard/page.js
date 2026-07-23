@@ -33,9 +33,6 @@ export default function DashboardPage() {
     return (
     <div className="p-6">
 
-      {/* Header */}
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">Dashboard</h1>
-
       {/* Loading state */}
       {loading && (
         <div className="text-center py-12 text-slate-500">Loading...</div>

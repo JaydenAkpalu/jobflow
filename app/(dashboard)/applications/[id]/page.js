@@ -9,7 +9,7 @@ export default function ApplicationDetailPage({ params }) {
   const [application, setApplication] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
+  
   // extract application id from URL params
   const { id } = use(params)
 

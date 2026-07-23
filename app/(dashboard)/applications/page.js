@@ -74,8 +74,7 @@ export default function ApplicationsPage() {
     <div className="p-6">
 
       {/* Header — page title and add button */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">Applications</h1>
+      <div className="flex items-center justify-end mb-6">
         <Link
           href="/applications/new"
           className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"

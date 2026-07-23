@@ -18,6 +18,8 @@ export default function ApplicationForm({ mode, id }) {
   const [notes, setNotes] = useState('')
   const [resumeFile, setResumeFile] = useState(null)
   const [coverLetterFile, setCoverLetterFile] = useState(null)
+  const [ existingResumeFilename, setExistingResumeFilename ] = useState(null)
+  const [ existingCoverLetterFilename, setExistingCoverLetterFilename ] = useState(null)
 
   // UI states
   const [initialLoading, setInitialLoading] = useState(mode === 'edit')
@@ -47,6 +49,8 @@ export default function ApplicationForm({ mode, id }) {
       setStatus(data.application.status)
       setAppliedDate(data.application.applied_date)
       setNotes(data.application.notes || '')
+      setExistingResumeFilename(data.application.resume_filename)
+      setExistingCoverLetterFilename(data.application.cover_letter_filename)
 
       // pre-fill is done, safe to show the form now
       setInitialLoading(false)
@@ -105,6 +109,12 @@ export default function ApplicationForm({ mode, id }) {
     router.push('/applications')
   }
 
+  async function handlePreview(type) {
+    const response = await fetch(`/api/applications/${id}/files/${type}`)
+    const data = await response.json()
+    window.open(data.url, '_blank')
+  }
+
   return (
     <div className="p-6 max-w-2xl mx-auto">
       {/* Back link — consistent with detail page, gives user an escape route at the top too */}
@@ -115,15 +125,6 @@ export default function ApplicationForm({ mode, id }) {
         ← Back to Applications
         </Link>
 
-      {/* Header — title changes based on mode */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">
-          {mode === 'edit' ? 'Edit Application' : 'Add Application'}
-        </h1>
-        <p className="text-slate-500 text-sm mt-1">
-            {mode === 'edit' ? 'Edit your application' : 'Track a new job application'}
-        </p>
-      </div>
 
       {/* Error message — validation or API errors */}
       {error && (
@@ -245,6 +246,16 @@ export default function ApplicationForm({ mode, id }) {
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Resume (PDF only)
             </label>
+            {/* Only shown in edit mode when a resume already exists */}
+            {existingResumeFilename && (
+              <button
+              type="button"
+              onClick={() => handlePreview('resume')}
+              className="text-xs text-blue-600 hover:text-blue-700 mb-2 cursor-pointer"
+              >
+                Current file: {existingResumeFilename}
+              </button>
+            )}
             <input
               type="file"
               accept=".pdf"
@@ -252,12 +263,23 @@ export default function ApplicationForm({ mode, id }) {
               className="w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100"
             />
           </div>
+          
 
           {/* Cover Letter Upload — never pre-filled, only sent if user selects a new file */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Cover Letter (PDF only)
             </label>
+            {/* Only shown in edit when a cover letter already exist */}
+            {existingCoverLetterFilename && (
+              <button
+              type="button"
+              onClick={() => handlePreview('cover-letter')}
+              className="text-xs text-blue-600 hover:text-blue-700 mb-2 cursor-pointer"
+              >
+                Current file: {existingCoverLetterFilename}
+              </button>
+            )}
             <input
               type="file"
               accept=".pdf"
