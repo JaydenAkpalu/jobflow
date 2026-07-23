@@ -12,6 +12,10 @@ export default function ApplicationsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
 
+  // holds the id of the application pending deletion, or null if no modal is showing
+  // storing the id (not just true/false) lets the modal know WHICH application to delete
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
+
   // fetch all applications when the page first loads
   useEffect(() => {
     async function fetchApplications() {
@@ -46,11 +50,24 @@ export default function ApplicationsPage() {
     return matchesSearch && matchesStatus
   })
 
-  // delete an application and remove it from the list without refetching
-  async function handleDelete(id) {
-  if (!window.confirm('Are you sure you want to delete this application?')) return
-  await fetch(`/api/applications/${id}`, { method: 'DELETE' })
-  setApplications(applications.filter((app) => app.id !== id))
+  // clicking the Delete button no longer deletes immediately —
+  // it just opens the modal by storing which application id is pending deletion
+  function handleDeleteClick(id) {
+    setConfirmDeleteId(id)
+  }
+
+  // the actual delete — only runs when the user confirms inside the modal
+  async function handleDelete() {
+    await fetch(`/api/applications/${confirmDeleteId}`, { method: 'DELETE' })
+    // remove the deleted application from state immediately (optimistic UI)
+    setApplications(applications.filter((app) => app.id !== confirmDeleteId))
+    // close the modal
+    setConfirmDeleteId(null)
+  }
+
+  // closes the modal without deleting anything
+  function handleCancelDelete() {
+    setConfirmDeleteId(null)
   }
 
   return (
@@ -120,7 +137,7 @@ export default function ApplicationsPage() {
       {/* Has applications but none match filter */}
       {!loading && !error && applications.length > 0 && filteredApplications.length === 0 && (
         <div className="text-center py-12">
-            <p className="text-slate-500">No applications match your search or filter</p>
+          <p className="text-slate-500">No applications match your search or filter</p>
         </div>
       )}
 
@@ -168,8 +185,9 @@ export default function ApplicationsPage() {
                 >
                   Edit
                 </Link>
+                {/* now opens the modal instead of deleting immediately */}
                 <button
-                  onClick={() => handleDelete(application.id)}
+                  onClick={() => handleDeleteClick(application.id)}
                   className="text-sm text-red-500 hover:text-red-700 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors"
                 >
                   Delete
@@ -177,6 +195,31 @@ export default function ApplicationsPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Delete confirmation modal — only renders when confirmDeleteId is not null */}
+      {/* fixed + inset-0 covers the entire viewport; bg-black/40 dims the page behind it */}
+      {confirmDeleteId && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="font-semibold text-slate-900 mb-2">Delete this application?</h3>
+            <p className="text-sm text-slate-500 mb-6">This action cannot be undone.</p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 text-sm text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
