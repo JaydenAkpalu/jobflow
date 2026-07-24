@@ -58,20 +58,20 @@ export default function Home() {
           {/* Right column - stacked application cards */}
           <div className="relative h-[26rem] max-w-2xl w-full justify-self-center md:justify-self-end group">
 
-            {/* Back card - Northlight */}
+            {/* Back card - Anthropic */}
             <div className="absolute top-28 right-32 w-80 bg-slate-900 border border-slate-800 rounded-xl p-6 -rotate-[10deg] ">
-              <p className="text-base font-medium text-slate-50">Northlight Systems</p>
-              <p className="text-sm text-slate-400 mb-4">Backend Eng Intern</p>
+              <p className="text-base font-medium text-slate-50">Anthropic</p>
+              <p className="text-sm text-slate-400 mb-4">AI Eng Intern</p>
               <span className="inline-block text-sm font-medium text-white bg-blue-600 px-3 py-1 rounded-full mb-4">
                 Applied
               </span>
               <div className="border-t border-slate-700 pt-3 flex items-center gap-2">
                 <Paperclip size={15} className="text-slate-400" />
-                <span className="text-xs text-slate-400 font-mono">northlight_backend_resume.pdf</span>
+                <span className="text-xs text-slate-400 font-mono">anthropic_ai-eng_resume.pdf</span>
               </div>
               <div className="pt-2 flex items-center gap-2">
                 <Paperclip size={15} className="text-slate-400" />
-                <span className="text-xs text-slate-400 font-mono">northlight_cover_letter.pdf</span>
+                <span className="text-xs text-slate-400 font-mono">anthropic_cover_letter.pdf</span>
               </div>
             </div>
 
@@ -84,7 +84,7 @@ export default function Home() {
               </span>
               <div className="border-t border-slate-700 pt-3 flex items-center gap-2">
                 <Paperclip size={15} className="text-slate-400" />
-                <span className="text-xs text-slate-400 font-mono">figma_product_resume.pdf</span>
+                <span className="text-xs text-slate-400 font-mono">figma_product-eng_resume.pdf</span>
               </div>
             </div>
 
