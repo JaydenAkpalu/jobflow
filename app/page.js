@@ -37,14 +37,14 @@ export default function Home() {
               resume you sent again.
             </h1>
             <p className="text-xl text-slate-500 mb-10">
-              Track every application from applied to offer, with the exact resume and cover letter attached — all in one dashboard.
+              Track every application with the exact resume and cover letter you submitted, so you can review exactly what you submitted before an interview.
             </p>
             <div className="flex items-center gap-4">
               <Link
                 href="/signup"
                 className="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg"
               >
-                Start tracking — free
+                Start Tracking Applications
               </Link>
               <Link
                 href="/login"
