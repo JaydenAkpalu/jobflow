@@ -2,7 +2,7 @@
 
 A full-stack web app that helps job seekers track all their job applications — across every platform — in one place.
 
-**Live app:** [myjobflow.vercel.app](https://myjobflow.vercel.app)
+**Live app:** [myjobflow.dev](https://myjobflow.vercel.app)
 
 ![JobFlow Landing Page](screenshots/landing-page.png)
 
