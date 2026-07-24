@@ -50,7 +50,7 @@ export default function Home() {
                 href="/login"
                 className="text-slate-600 px-8 py-3 rounded-lg font-medium hover:text-slate-900 transition-colors text-lg border border-slate-200 hover:border-slate-300"
               >
-                See how it works
+                Log in
               </Link>
             </div>
           </div>
