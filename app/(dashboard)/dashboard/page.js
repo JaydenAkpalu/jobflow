@@ -31,7 +31,7 @@ export default function DashboardPage() {
     // 5 most recent applications
 
     return (
-    <div className="p-6">
+    <div className="p-6 max-w-6xl mx-auto">
 
       {/* Loading state */}
       {loading && (
@@ -60,27 +60,27 @@ export default function DashboardPage() {
           {/* Status breakdown */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
 
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+            <div className="bg-blue-50 border border-blue-100 shadow-xl rounded-xl p-6">
               <p className="text-xs font-medium text-blue-600 uppercase tracking-wide mb-1">Applied</p>
               <p className="text-2xl font-bold text-blue-600">{stats.by_status.applied}</p>
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-100 rounded-xl p-4">
+            <div className="bg-yellow-50 border border-yellow-100 shadow-xl rounded-xl p-6">
               <p className="text-xs font-medium text-yellow-600 uppercase tracking-wide mb-1">Interview</p>
               <p className="text-2xl font-bold text-yellow-600">{stats.by_status.interview}</p>
             </div>
 
-            <div className="bg-green-50 border border-green-100 rounded-xl p-4">
+            <div className="bg-green-50 border border-green-100 shadow-xl rounded-xl p-6">
               <p className="text-xs font-medium text-green-600 uppercase tracking-wide mb-1">Offer</p>
               <p className="text-2xl font-bold text-green-600">{stats.by_status.offer}</p>
             </div>
 
-            <div className="bg-red-50 border border-red-100 rounded-xl p-4">
+            <div className="bg-red-50 border border-red-100 shadow-xl rounded-xl p-6">
               <p className="text-xs font-medium text-red-600 uppercase tracking-wide mb-1">Rejected</p>
               <p className="text-2xl font-bold text-red-600">{stats.by_status.rejected}</p>
             </div>
 
-            <div className="bg-slate-100 border border-slate-200 rounded-xl p-4">
+            <div className="bg-slate-100 border border-slate-200 shadow-xl rounded-xl p-6">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Ghosted</p>
               <p className="text-2xl font-bold text-slate-600">{stats.by_status.ghosted}</p>
             </div>
@@ -88,7 +88,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Recent applications */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6">
+          <div className="bg-white border border-slate-200 rounded-xl p-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-semibold text-slate-900">Recent Applications</h2>
               <Link href="/applications" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
