@@ -1,7 +1,13 @@
-import { Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const cooperHewitt = localFont({
+  src: [
+    { path: './fonts/CooperHewitt-Book.otf', weight: '400', style: 'normal' },
+    { path: './fonts/CooperHewitt-Medium.otf', weight: '500', style: 'normal' },
+    { path: './fonts/CooperHewitt-Bold.otf', weight: '700', style: 'normal' },
+  ],
+})
 
 export const metadata = {
   title: 'JobFlow',
@@ -11,7 +17,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full">
-      <body className={`${inter.className} min-h-full flex flex-col`}>
+      <body className={`${cooperHewitt.className} min-h-full flex flex-col`}>
         {children}
       </body>
     </html>

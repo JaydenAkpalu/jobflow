@@ -37,7 +37,7 @@ export default function Home() {
               resume you sent again.
             </h1>
             <p className="text-xl text-slate-500 mb-10">
-              Track every application with the exact resume and cover letter you submitted, so you can review exactly what you submitted before an interview.
+              Track every application with the exact resume and cover letter you submitted, so you can review what you submitted before an interview.
             </p>
             <div className="flex items-center gap-4">
               <Link
@@ -50,7 +50,7 @@ export default function Home() {
                 href="/login"
                 className="text-slate-600 px-8 py-3 rounded-lg font-medium hover:text-slate-900 transition-colors text-lg border border-slate-200 hover:border-slate-300"
               >
-                Log in
+                See how it works
               </Link>
             </div>
           </div>
