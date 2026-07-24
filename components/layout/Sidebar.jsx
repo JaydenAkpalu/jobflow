@@ -16,7 +16,7 @@ export default function Sidebar() {
       
       {/* Logo */}
       <div className="h-16 flex items-center px-6">
-        <span className="text-xl font-bold text-slate-900">JobFlow</span>
+        <Link href="/dashboard" className="text-xl font-bold text-slate-900">JobFlow</Link>
       </div>
 
       {/* Navigation */}
